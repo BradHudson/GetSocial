@@ -14,6 +14,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 
 group :development, :test do
   gem 'pry-rails', '~> 0.3.4'
+  gem 'sqlite3',     '1.3.9'
 end
 
 group :development do
