@@ -1,19 +1,8 @@
-.container
-  .row
-    .col-md-12.text-center
-      %h1 Your Tweets
-  .row
-    .col-md-12.text-center
-      %h3
-        Don't see the correct tweets? Enter your username.
-      = form_tag("/") do
-        = label_tag(:q, "Search for:")
-        = text_field_tag(:user_name)
-        = submit_tag("Search")
-  .row
-    - if @tweets
-      - @tweets.each do |tweet|
-        .col-md-12
-          .tweet
-            %p
-              = tweet.text
+%h1 Your Tweets
+%h3
+  Don't see the correct tweets? Enter your username.
+%hr
+  = form_tag("/") do
+    = label_tag(:user_name,"Search for:", class: "twitter-label")
+    = text_field_tag(:user_name, "", class: "form-control", placeholder: "Username")
+    = submit_tag("Search",class: 'btn btn-primary btn-xl submit-tweets')
