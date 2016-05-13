@@ -2,6 +2,7 @@ source 'https://rubygems.org'
 
 gem 'dotenv-rails', '~> 2.1', '>= 2.1.1'
 gem 'rails', '4.2.5.1'
+gem 'haml'
 gem 'pg', '~> 0.15'
 gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'
