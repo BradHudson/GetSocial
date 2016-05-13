@@ -1,27 +1,31 @@
 class HomeController < ApplicationController
   def index
-    @tweets = get_tweets
+    @tweets = get_tweets(params[:user_name])
   end
 
   private
 
-  def get_tweets
+  def get_tweets(user_name)
     binding.pry
-    topics = ["ruby", "python"]
-    begin
-      client.filter(track: topics.join(",")) do |tweet|
-        puts tweet.text
-      end
-    rescue Twitter::Error::TooManyRequests => error
-      # NOTE: Your process could go to sleep for up to 15 minutes but if you
-      # retry any sooner, it will almost certainly fail with the same exception.
-      sleep error.rate_limit.reset_in + 1
-      retry
+    get_all_tweets(user_name)
+  end
+
+  def collect_with_max_id(collection=[], max_id=nil, &block)
+    response = yield(max_id)
+    collection += response
+    response.empty? ? collection.flatten : collect_with_max_id(collection, response.last.id - 1, &block)
+  end
+
+  def get_all_tweets(user)
+    collect_with_max_id do |max_id|
+      options = {count: 10, include_rts: true}
+      options[:max_id] = max_id unless max_id.nil?
+      client.user_timeline(user, options)
     end
   end
 
   def client
-   Twitter::Streaming::Client.new do |config|
+   Twitter::REST::Client.new do |config|
       config.consumer_key        = ENV['TWITTER_CONSUMER_KEY']
       config.consumer_secret     = ENV['TWITTER_SECRET']
       config.access_token        = ENV['TWITTER_ACCESS_TOKEN']
