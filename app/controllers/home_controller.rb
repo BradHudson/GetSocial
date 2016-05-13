@@ -6,22 +6,17 @@ class HomeController < ApplicationController
   private
 
   def get_tweets(user_name)
-    binding.pry
-    get_all_tweets(user_name)
-  end
-
-  def collect_with_max_id(collection=[], max_id=nil, &block)
-    response = yield(max_id)
-    collection += response
-    response.empty? ? collection.flatten : collect_with_max_id(collection, response.last.id - 1, &block)
+    begin
+      get_all_tweets(user_name) unless user_name.blank?
+    rescue Twitter::Error::TooManyRequests => e
+      flash[:notice] = "Oops! Too many requests to Twitter. Come Back later."
+      nil
+    end
   end
 
   def get_all_tweets(user)
-    collect_with_max_id do |max_id|
-      options = {count: 10, include_rts: true}
-      options[:max_id] = max_id unless max_id.nil?
-      client.user_timeline(user, options)
-    end
+    options = {count: 10, include_rts: false}
+    client.user_timeline(user, options)
   end
 
   def client
