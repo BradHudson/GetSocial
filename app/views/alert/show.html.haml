@@ -1,0 +1,10 @@
+%h1
+    Alerts!
+
+- @alerts.each do |alert|
+    .col-md-12
+        .tweet
+            %p
+                = alert.title
+            %p
+                = alert.created_at

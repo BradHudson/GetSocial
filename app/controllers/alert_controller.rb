@@ -10,7 +10,7 @@ class AlertController < ApplicationController
     respond_to do |format|
       if @alert.save
         format.html { redirect_to root_path, notice: 'Alert was successfully created.' }
-        format.json { render :show, status: :created, location: @alert }
+        format.json { render json: @alert }
       else
         format.html { redirect_to root_path }
         format.json { render json: @alert.errors, status: :unprocessable_entity }
